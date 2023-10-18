@@ -3,11 +3,13 @@ const addCucumberPreprocessorPlugin =
     require("@badeball/cypress-cucumber-preprocessor").addCucumberPreprocessorPlugin;
 const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
 require('dotenv').config({path:'../../.env'});
+const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 
 module.exports = defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   e2e: {
+    chromeWebSecurity: false,
     async setupNodeEvents(on, config) {
       on('before:browser:launch', (browser = {}, launchOptions) => {
         // `args` is an array of all the arguments that will
@@ -23,7 +25,13 @@ module.exports = defineConfig({
 
       await addCucumberPreprocessorPlugin(on, config);
       on("file:preprocessor", browserify.default(config));
+      await allureWriter(on, config);
       return config;
+    },
+    env: {
+      allure: true,
+      allureResultsPath: "allure-results",
+      allureReuseAfterSpec: true
     },
     specPattern: [
       "cypress/e2e/**/*.feature"

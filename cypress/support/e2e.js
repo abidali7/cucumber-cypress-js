@@ -5,6 +5,7 @@ import './scope.js'
 import './logger.js'
 import '@cypress/xpath';
 import 'cypress-real-events';
+require('@shelex/cypress-allure-plugin');
 
 
 Cypress.on("uncaught:exception", _ => {
