@@ -1,4 +1,4 @@
-# cucumber-playwright-ts
+# cucumber-cypress-js
 This repository is aimed for framework of Cucumber with Cypress along with reporting by Allure. In this case, automated tests that cover scenario taken from a demo shopping cart application, where user can comple shopping cart journey.
 
 ## Prerequisites
