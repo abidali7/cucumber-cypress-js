@@ -12,8 +12,13 @@ Then(/^The "(tab title)" is in "(.*)"$/, function (element, language) {
     cy.title().should('eq', expectedValue );
 });
 
-When(/^I click the "(.* button|.* input field|.* mask)"$/, function(selectorIdentifier) {
-    cy.helper.clickElement(selectorIdentifier);
+When(/^I click the "(.* button|.* input field|.* mask|.* link)"$/, function(selectorIdentifier) {
+    cy.log("click selectorIdentifier: " + selectorIdentifier);
+    cy.helper.clickElement(selectorIdentifier, false);
+});
+
+When(/^I click the "(.*)" by the "(.*)"$/, function(selectorIdentifier, text) {
+    cy.helper.clickElement(selectorIdentifier, text);
 });
 
 When(/^I hover the element "(.*)"$/, function(selectorIdentifier) {
@@ -43,8 +48,24 @@ Then(/^I see(?: the| a) "(.*)"( by scrolling)?$/, function (pageElement, scrollT
         cy.helper.getElement(pageElement).should('be.visible');
 });
 
+Then(/^I no more see the "(.*)"$/, function (pageElement) {
+    cy.helper.getElement(pageElement).should('not.exist');
+});
+
+Then(/^I see "(.*)" activated as "(.*)"$/, function (pageElement, text) {
+    cy.helper.getElement(pageElement).should('have.text', text);
+});
+
+Then(/^I see "(.*)" are in "(.*)" order$/, function (pageElement, text) {
+    cy.log(cy.helper.sortElements(pageElement, text));
+});
+
 Then(/^I see that the url matches the "(.*)" url$/, function(pageDescription) {
     cy.url().should('match', cy.pageMap.getPageRegExp(pageDescription));
     cy.scope.currentPage = pageDescription;
     cy.scope.currentPageObject = cy.pageMap.getPage(pageDescription);
+});
+
+When(/^I select "(.*)" from "(.* sort container|.* dropdown)"$/, function (text, pageElement) {
+    cy.helper.selectElementByText(pageElement, text);
 });

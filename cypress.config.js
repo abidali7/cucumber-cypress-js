@@ -28,6 +28,7 @@ module.exports = defineConfig({
       await allureWriter(on, config);
       return config;
     },
+    testIsolation: false,
     env: {
       allure: true,
       allureResultsPath: "allure-results",

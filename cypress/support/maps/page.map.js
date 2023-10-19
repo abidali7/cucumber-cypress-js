@@ -10,12 +10,16 @@ import WildCard from '../objects/wildcard.js';
 
 const GooglePage = require("../pages/google.page");
 const SaucedemoLogin = require("../pages/saucedemo.login.page");
+const SaucedemoInventory  = require("../pages/saucedemo.inventory.page");
+const SaucedemoDetailsView  = require("../pages/saucedemo.details.page");
 
 cy.pageMap = {};
 
 const PAGEMAP = {
     'google page': GooglePage,
-    'saucedemo login page': SaucedemoLogin 
+    'saucedemo login page': SaucedemoLogin,
+    'saucedemo inventory page': SaucedemoInventory,
+    'saucedemo details page': SaucedemoDetailsView
 }
 
 cy.pageMap.getPageUrl = (pageDescription) => {

@@ -26,7 +26,8 @@ const LOCATOR_TYPES = {
     CSS: 2,
     SELECTOR: 4,
     DATA_CY: 8,
-    ID: 16
+    ID: 16,
+    CONTAIN: 32
 };
 
 module.exports = {

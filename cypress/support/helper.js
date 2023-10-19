@@ -1,4 +1,4 @@
-import {DEFAULT_TIMEOUT, LOCATOR_TYPES} from './constants.js';
+import { DEFAULT_TIMEOUT, LOCATOR_TYPES } from './constants.js';
 
 cy.helper = {};
 cy.helper.goto = (pageDescription) => {
@@ -9,22 +9,24 @@ cy.helper.goto = (pageDescription) => {
     cy.scope.currentuuid = null;
 }
 
-cy.helper.typeText = (text, selectorIdentifier,hitEnter) => {
-    cy.helper.getElement(selectorIdentifier).type(text, {delay: 50});
-    if(hitEnter)
+cy.helper.typeText = (text, selectorIdentifier, hitEnter) => {
+    cy.helper.getElement(selectorIdentifier).type(text, { delay: 50 });
+    if (hitEnter)
         cy.helper.getElement(selectorIdentifier).type("{enter}");
 }
 
-cy.helper.clickElement = (selectorIdentifier) => {
-    cy.helper.getElement(selectorIdentifier).click();
+cy.helper.clickElement = (selectorIdentifier, text) => {
+    const ele = cy.helper.getElement(selectorIdentifier);
+    if (text) ele.contains(text).click()
+    else ele.click();
 }
 
-cy.helper.clickElementWithWildCards = (selectorIdentifier, wildCards ) => {
+cy.helper.clickElementWithWildCards = (selectorIdentifier, wildCards) => {
     cy.helper.getElementWithWildCards(selectorIdentifier, wildCards).click();
 }
 
 cy.helper.hoverElement = (selectorIdentifier) => {
-    cy.helper.getElement(selectorIdentifier).realHover({pointer: "mouse"});
+    cy.helper.getElement(selectorIdentifier).realHover({ pointer: "mouse" });
 }
 
 /**
@@ -32,9 +34,9 @@ cy.helper.hoverElement = (selectorIdentifier) => {
  * @param selectorIdentifier
  * @returns {undefined|*}
  */
-function getSelectorObject (selectorIdentifier) {
+function getSelectorObject(selectorIdentifier) {
     const selectorObject = cy.scope.currentPageObject.selectors[selectorIdentifier];
-    if(selectorObject === undefined) {
+    if (selectorObject === undefined) {
         cy.logger.log("Error", `No element found for selectorIdentifier [${selectorIdentifier}]. returning undefined`);
         return undefined;
     }
@@ -78,27 +80,32 @@ cy.helper.getNestedElementWithWildCards = (parentElement, selectorIdentifier, wi
 
 cy.helper.getAttributeValueFromElement = (element, attribute) => {
     //use prop instead of attr, as attr sometimes returns the default value
-    const attributeValue = element.invoke('prop',attribute).debug();
+    const attributeValue = element.invoke('prop', attribute).debug();
     debugger;
     cy.logger.log("Info", `Attribute Value = [${attributeValue}]`);
     return attributeValue;
 }
 
 function findElement(selectorType, selectorValue) {
-    switch(selectorType) {
+    cy.log("selectorType: " + selectorType);
+    cy.log(selectorValue);
+    switch (selectorType) {
         case LOCATOR_TYPES.XPATH:
             return cy.xpath(selectorValue, { timeout: DEFAULT_TIMEOUT });
-            break;
+
         case LOCATOR_TYPES.DATA_CY:
-            return cy.get(`[data-cy="${selectorValue}"]`, { timeout: DEFAULT_TIMEOUT});
-            break;
+            return cy.get(`[data-cy="${selectorValue}"]`, { timeout: DEFAULT_TIMEOUT });
+
         case LOCATOR_TYPES.ID:
-            return cy.get(`[id="${selectorValue}"]`, {timeout: DEFAULT_TIMEOUT});
-            break;
+            return cy.get(`[id="${selectorValue}"]`, { timeout: DEFAULT_TIMEOUT });
+
+        case LOCATOR_TYPES.CONTAIN:
+            return cy.contains(selectorValue, { timeout: DEFAULT_TIMEOUT });
+
         case LOCATOR_TYPES.CSS:
         default:
             return cy.get(selectorValue, { timeout: DEFAULT_TIMEOUT });
-            break;
+
     }
 }
 
@@ -111,10 +118,9 @@ function findElement(selectorType, selectorValue) {
  * @returns {*}
  */
 function findNestedElement(parentSelectorValue, selectorType, selectorValue) {
-    switch(selectorType) {
+    switch (selectorType) {
         case LOCATOR_TYPES.XPATH:
-            return cy.xpath(parentSelectorValue+selectorValue, {timeout: DEFAULT_TIMEOUT});
-            break;
+            return cy.xpath(parentSelectorValue + selectorValue, { timeout: DEFAULT_TIMEOUT });
     }
 }
 
@@ -125,7 +131,7 @@ function findNestedElement(parentSelectorValue, selectorType, selectorValue) {
  * @returns {*}
  */
 cy.helper.replaceWildCard = (text, wildCardObject) => {
-    if(wildCardObject.value === undefined) {
+    if (wildCardObject.value === undefined) {
         cy.logger.log("Error", `Value is undefined, so we can not replace anything in the text [${text}] with wildcard [${wildCardObject.wildCard}]`)
     }
     return text.replace(wildCardObject.wildCard, wildCardObject.value);
@@ -140,3 +146,14 @@ cy.helper.stringIncludesRegularExpression = (text) => {
     return text.includes(".*");
 }
 
+cy.helper.selectElementByText = (selectorIdentifier, text) => {
+    cy.helper.getElement(selectorIdentifier).select(text);
+}
+
+cy.helper.sortElements = (selectorIdentifier, text) => {
+    let Arr = new Array();
+    cy.helper.getElement(selectorIdentifier).each(($el) => {
+        Arr.push(Number(($el.text().replace('$', '')).trim()));
+        !!Arr.reduce((n, item) => n !== false && item >= n && item);
+    });
+}
