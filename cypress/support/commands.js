@@ -23,3 +23,24 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('LoginWithPageSession', () => {
+    let savedCookies;
+
+    // Save cookies
+    cy.getCookies().then((cookies) => {
+        savedCookies = cookies;
+    });
+
+    // add cookies thru cypress's session feature
+    cy.session('mySession', () => {
+        savedCookies.forEach(function (obj) {
+            for (let key in obj) {
+                let value = obj[key];
+
+                //cy.log(`Key: ${key} => Value: ${value}`);
+                cy.setCookie(key.toString(), value.toString());
+            }
+        });
+    });
+});

@@ -5,7 +5,8 @@ import './scope.js'
 import './logger.js'
 import '@cypress/xpath';
 import 'cypress-real-events';
-require('@shelex/cypress-allure-plugin');
+import '@shelex/cypress-allure-plugin';
+import './commands.js'
 
 
 Cypress.on("uncaught:exception", _ => {
@@ -13,7 +14,11 @@ Cypress.on("uncaught:exception", _ => {
 });
 
 afterEach(() => {
-    cy.clearCookies();
-    cy.clearLocalStorage();
+  //cy.LoginWithPageSession();
+});
+
+beforeEach(() => {
+  cy.clearCookies();
+  cy.clearLocalStorage();
 });
 
