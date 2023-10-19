@@ -12,6 +12,8 @@ const GooglePage = require("../pages/google.page");
 const SaucedemoLogin = require("../pages/saucedemo.login.page");
 const SaucedemoInventory  = require("../pages/saucedemo.inventory.page");
 const SaucedemoDetailsView  = require("../pages/saucedemo.details.page");
+const SaucedemoCartView  = require("../pages/saucedemo.cart.page");
+const SaucedemoCheckout  = require("../pages/saucedemo.checkout.page");
 
 cy.pageMap = {};
 
@@ -19,7 +21,9 @@ const PAGEMAP = {
     'google page': GooglePage,
     'saucedemo login page': SaucedemoLogin,
     'saucedemo inventory page': SaucedemoInventory,
-    'saucedemo details page': SaucedemoDetailsView
+    'saucedemo details page': SaucedemoDetailsView,
+    'saucedemo cart page': SaucedemoCartView,
+    'saucedemo checkout page': SaucedemoCheckout
 }
 
 cy.pageMap.getPageUrl = (pageDescription) => {

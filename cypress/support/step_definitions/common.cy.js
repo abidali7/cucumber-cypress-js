@@ -52,7 +52,7 @@ Then(/^I no more see the "(.*)"$/, function (pageElement) {
     cy.helper.getElement(pageElement).should('not.exist');
 });
 
-Then(/^I see "(.*)" activated as "(.*)"$/, function (pageElement, text) {
+Then(/^I see "(.*)"(?: activated| a| appeared) as "(.*)"$/, function (pageElement, text) {
     cy.helper.getElement(pageElement).should('have.text', text);
 });
 
